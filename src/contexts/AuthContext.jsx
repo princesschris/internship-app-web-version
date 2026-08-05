@@ -12,6 +12,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [profileError, setProfileError] = useState('');
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async (userId) => {
@@ -20,7 +21,12 @@ export const AuthProvider = ({ children }) => {
       .select('*')
       .eq('id', userId)
       .single();
-    if (!error) setProfile(data);
+    if (error) {
+      setProfileError(error.message);
+      return null;
+    }
+    setProfileError('');
+    setProfile(data);
     return data;
   };
 
@@ -88,6 +94,17 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const signInWithGoogle = async (intendedRole) => {
+    if (intendedRole) sessionStorage.setItem('intendedRole', intendedRole);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/complete`
+      }
+    });
+    if (error) throw error;
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
@@ -117,18 +134,26 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const refreshProfile = async () => {
+    if (!session) return null;
+    return loadProfile(session.user.id);
+  };
+
   const value = {
     session,
     user: session?.user ?? null,
     profile,
+    profileError,
     loading,
     signUpStudent,
     signUpOrganization,
     signIn,
+    signInWithGoogle,
     signOut,
     sendPasswordReset,
     updatePassword,
-    updateProfile
+    updateProfile,
+    refreshProfile
   };
 
   return (
