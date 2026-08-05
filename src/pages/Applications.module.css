@@ -1,0 +1,89 @@
+.heading {
+  font-size: 30px;
+  margin-bottom: 18px;
+}
+
+.filterRow {
+  margin-bottom: 20px;
+}
+
+.filterRow select {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-ink);
+}
+
+.title:hover {
+  color: var(--color-primary);
+}
+
+.sub {
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.date {
+  color: var(--color-muted);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.buttonGroup .btn {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.empty {
+  color: var(--color-muted);
+  padding: 40px 0;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

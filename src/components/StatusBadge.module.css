@@ -1,0 +1,35 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pending {
+  background: #fff2df;
+  color: var(--color-warning);
+}
+
+.accepted, .active {
+  background: #e3f7ee;
+  color: var(--color-success);
+}
+
+.rejected {
+  background: #fdecec;
+  color: var(--color-danger);
+}
+
+.waitlisted {
+  background: #efeaff;
+  color: var(--color-waitlist);
+}
+
+.closed {
+  background: #efedf5;
+  color: var(--color-muted);
+}

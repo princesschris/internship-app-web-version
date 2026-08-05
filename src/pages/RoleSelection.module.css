@@ -1,0 +1,56 @@
+.hero {
+  text-align: center;
+  max-width: 640px;
+  margin: 40px auto 48px;
+}
+
+.headline {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.sub {
+  color: var(--color-muted);
+  font-size: 17px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.option {
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.option:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-pop);
+}
+
+.option h2 {
+  font-size: 22px;
+}
+
+.option p {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .headline {
+    font-size: 30px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
