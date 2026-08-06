@@ -17,7 +17,7 @@ export default function StudentLogin() {
     setLoading(true);
     try {
       await signIn({ email, password });
-      navigate('/internships');
+      navigate('/home');
     } catch (err) {
       setError(err.message);
     } finally {

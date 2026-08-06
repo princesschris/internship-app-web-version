@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   IoMenuOutline,
   IoCloseOutline,
+  IoHomeOutline,
   IoBriefcaseOutline,
   IoAddCircleOutline,
   IoDocumentTextOutline,
@@ -28,11 +29,18 @@ export default function Navbar() {
   return (
     <header className={styles.header}>
       <div className={styles.bar}>
-        <Link to="/internships" className={styles.brand}>
+        <Link to={user ? '/home' : '/'} className={styles.brand}>
           InternLink
         </Link>
 
         <nav className={`${styles.links} ${open ? styles.linksOpen : ''}`}>
+          {user && (
+            <Link to="/home" onClick={() => setOpen(false)} className={styles.link}>
+              <IoHomeOutline size={18} />
+              Home
+            </Link>
+          )}
+
           <Link to="/internships" onClick={() => setOpen(false)} className={styles.link}>
             <IoBriefcaseOutline size={18} />
             Browse

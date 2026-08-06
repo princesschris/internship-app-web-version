@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
-  IoChevronBack,
   IoCameraOutline,
   IoMailOutline,
   IoLocationOutline,
@@ -11,13 +10,49 @@ import {
   IoLogoLinkedin,
   IoGlobeOutline
 } from 'react-icons/io5';
+import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
+import StatusBadge from '../components/StatusBadge';
+import { formatDateRange, formatDuration } from '../lib/duration';
 import styles from './Profile.module.css';
 
 export default function Profile() {
-  const { profile, profileError, refreshProfile } = useAuth();
-  const navigate = useNavigate();
-  const [tab, setTab] = useState('personal');
+  const { user, profile, profileError, refreshProfile } = useAuth();
+  const routerLocation = useLocation();
+  const [tab, setTab] = useState(routerLocation.state?.tab || 'personal');
+  const [experiences, setExperiences] = useState([]);
+  const [loadingExperiences, setLoadingExperiences] = useState(true);
+
+  const isOrg = profile?.role === 'organization';
+
+  useEffect(() => {
+    if (!user || !profile) return;
+    loadExperiences();
+  }, [user, profile]);
+
+  const loadExperiences = async () => {
+    setLoadingExperiences(true);
+    const column = isOrg ? 'organization_id' : 'student_id';
+    const { data, error } = await supabase
+      .from('work_experiences')
+      .select('*')
+      .eq(column, user.id)
+      .order('start_date', { ascending: false });
+    if (!error) setExperiences(data);
+    setLoadingExperiences(false);
+  };
+
+  const handleRespond = async (id, status) => {
+    const { data, error } = await supabase
+      .from('work_experiences')
+      .update({ status, responded_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    if (!error) {
+      setExperiences((prev) => prev.map((exp) => (exp.id === id ? data : exp)));
+    }
+  };
 
   if (!profile) {
     return (
@@ -31,14 +66,13 @@ export default function Profile() {
     );
   }
 
-  const isOrg = profile.role === 'organization';
   const displayName = isOrg ? profile.organization_name : profile.full_name;
-  const location = [profile.local_government, profile.state].filter(Boolean).join(', ');
+  const locationText = [profile.local_government, profile.state].filter(Boolean).join(', ');
 
   const fields = [
     { icon: IoMailOutline, label: 'Email', value: profile.email },
     ...(isOrg ? [{ icon: IoCallOutline, label: 'Phone', value: profile.primary_phone }] : []),
-    { icon: IoLocationOutline, label: 'Location', value: location },
+    { icon: IoLocationOutline, label: 'Location', value: locationText },
     { icon: IoLogoGithub, label: 'GitHub', value: profile.github_url, isLink: true },
     { icon: IoLogoTwitter, label: 'Twitter / X', value: profile.twitter_url, isLink: true },
     { icon: IoLogoLinkedin, label: 'LinkedIn', value: profile.linkedin_url, isLink: true },
@@ -49,9 +83,6 @@ export default function Profile() {
     <div className="page">
       <div className={`card ${styles.container}`}>
         <div className={styles.topBar}>
-          <button className={styles.backBtn} onClick={() => navigate(-1)} aria-label="Go back">
-            <IoChevronBack size={22} />
-          </button>
           <h1 className={styles.pageTitle}>My Profile</h1>
           <Link to="/profile/edit" className={styles.editLink}>Edit</Link>
         </div>
@@ -110,8 +141,43 @@ export default function Profile() {
             ))}
           </div>
         ) : (
-          <div className={styles.teamsPlaceholder}>
-            <p>Nothing here yet.</p>
+          <div className={styles.teamsSection}>
+            {!isOrg && (
+              <Link to="/experience/new" className={`btn btn-primary ${styles.addExperienceBtn}`}>
+                Add organization
+              </Link>
+            )}
+
+            {loadingExperiences ? (
+              <p className={styles.teamsPlaceholder}>Loading...</p>
+            ) : experiences.length === 0 ? (
+              <div className={styles.teamsPlaceholder}>
+                <p>{isOrg ? 'No verification requests yet.' : 'No work experience added yet.'}</p>
+              </div>
+            ) : (
+              <div className={styles.experienceList}>
+                {experiences.map((exp) => (
+                  <div key={exp.id} className={styles.experienceRow}>
+                    <div className={styles.experienceHeader}>
+                      <span className={styles.experienceTitle}>
+                        {isOrg ? exp.student_name : exp.organization_name}
+                      </span>
+                      <StatusBadge status={exp.status} />
+                    </div>
+                    {exp.role_title && <p className={styles.experienceRole}>{exp.role_title}</p>}
+                    <p className={styles.experienceDates}>
+                      {formatDateRange(exp.start_date, exp.end_date)} · {formatDuration(exp.start_date, exp.end_date)}
+                    </p>
+                    {isOrg && exp.status === 'pending' && (
+                      <div className={styles.experienceActions}>
+                        <button className="btn btn-primary" onClick={() => handleRespond(exp.id, 'verified')}>Verify</button>
+                        <button className="btn btn-danger" onClick={() => handleRespond(exp.id, 'rejected')}>Reject</button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

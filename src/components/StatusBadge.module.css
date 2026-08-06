@@ -14,7 +14,7 @@
   color: var(--color-warning);
 }
 
-.accepted, .active {
+.accepted, .active, .verified {
   background: #e3f7ee;
   color: var(--color-success);
 }

@@ -29,7 +29,7 @@ export default function StudentSignUp() {
     try {
       const data = await signUpStudent(form);
       if (data.session) {
-        navigate('/internships');
+        navigate('/home');
       } else {
         setNeedsConfirmation(true);
       }

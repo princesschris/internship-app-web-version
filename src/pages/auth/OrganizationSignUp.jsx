@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import LocationSelect from '../../components/LocationSelect';
+import CheckEmailNotice from '../../components/CheckEmailNotice';
 import styles from './AuthForms.module.css';
 
 export default function OrganizationSignUp() {
@@ -18,6 +19,7 @@ export default function OrganizationSignUp() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
 
   const update = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
@@ -26,14 +28,28 @@ export default function OrganizationSignUp() {
     setError('');
     setLoading(true);
     try {
-      await signUpOrganization(form);
-      navigate('/internships');
+      const data = await signUpOrganization(form);
+      if (data.session) {
+        navigate('/home');
+      } else {
+        setNeedsConfirmation(true);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (needsConfirmation) {
+    return (
+      <div className="page">
+        <div className={styles.wrap}>
+          <CheckEmailNotice email={form.email} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page">

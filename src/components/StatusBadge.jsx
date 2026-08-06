@@ -7,7 +7,8 @@ const LABELS = {
   rejected: 'Rejected',
   waitlisted: 'Waitlisted',
   active: 'Active',
-  closed: 'Closed'
+  closed: 'Closed',
+  verified: 'Verified'
 };
 
 export default function StatusBadge({ status }) {

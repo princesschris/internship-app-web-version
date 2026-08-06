@@ -20,6 +20,8 @@ import EditInternship from './pages/EditInternship';
 import Applications from './pages/Applications';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
+import AddExperience from './pages/AddExperience';
+import Home from './pages/Home';
 
 export default function App() {
   return (
@@ -27,6 +29,14 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<RoleSelection />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/student/signup" element={<StudentSignUp />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/organization/signup" element={<OrganizationSignUp />} />
@@ -83,6 +93,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <ChangePassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/experience/new"
+          element={
+            <ProtectedRoute role="student">
+              <AddExperience />
             </ProtectedRoute>
           }
         />
