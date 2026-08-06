@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
       email,
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/home`,
         data: {
           role: 'student',
           first_name: firstName,
@@ -74,6 +75,7 @@ export const AuthProvider = ({ children }) => {
       email,
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/home`,
         data: {
           role: 'organization',
           organization_name: organizationName,
