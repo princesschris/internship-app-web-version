@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabaseClient';
 import LocationSelect from '../components/LocationSelect';
+import LocationPicker from '../components/LocationPicker';
+import { STATE_COORDINATES } from '../data/nigeriaStateCoordinates';
 import styles from './EditProfile.module.css';
 
 export default function EditProfile() {
@@ -18,11 +20,14 @@ export default function EditProfile() {
     secondaryPhone: profile.secondary_phone || '',
     state: profile.state || '',
     localGovernment: profile.local_government || '',
+    address: profile.address || '',
     avatarUrl: profile.avatar_url || '',
     githubUrl: profile.github_url || '',
     twitterUrl: profile.twitter_url || '',
     linkedinUrl: profile.linkedin_url || '',
-    websiteUrl: profile.website_url || ''
+    websiteUrl: profile.website_url || '',
+    latitude: profile.latitude ?? null,
+    longitude: profile.longitude ?? null
   });
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -65,7 +70,10 @@ export default function EditProfile() {
         linkedin_url: form.linkedinUrl || null,
         website_url: form.websiteUrl || null,
         state: form.state,
-        local_government: form.localGovernment
+        local_government: form.localGovernment,
+        address: form.address || null,
+        latitude: form.latitude,
+        longitude: form.longitude
       };
 
       if (isOrg) {
@@ -143,6 +151,15 @@ export default function EditProfile() {
             </div>
           )}
 
+          <div className="field">
+            <label>Address</label>
+            <input
+              placeholder="Street address, building name, etc."
+              value={form.address}
+              onChange={update('address')}
+            />
+          </div>
+
           <LocationSelect
             state={form.state}
             localGovernment={form.localGovernment}
@@ -150,6 +167,18 @@ export default function EditProfile() {
             onLocalGovernmentChange={(value) => setForm({ ...form, localGovernment: value })}
             required={false}
           />
+
+          {isOrg && (
+            <div className="field">
+              <label>Exact location on map</label>
+              <LocationPicker
+                latitude={form.latitude}
+                longitude={form.longitude}
+                defaultCenter={form.state ? STATE_COORDINATES[form.state] : null}
+                onChange={({ lat, lng }) => setForm({ ...form, latitude: lat, longitude: lng })}
+              />
+            </div>
+          )}
 
           <div className="field">
             <label>GitHub</label>

@@ -1,0 +1,73 @@
+.wrap {
+  margin-bottom: 20px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+}
+
+.search .btn {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+.mapWrap {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1.5px solid var(--color-border);
+}
+
+.map {
+  height: 260px;
+  width: 100%;
+  cursor: crosshair;
+}
+
+.pinIconWrapper {
+  background: transparent;
+  border: none;
+}
+
+.pin {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(20, 18, 31, 0.35);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.actions .btn {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--color-muted);
+}

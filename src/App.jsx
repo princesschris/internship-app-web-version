@@ -22,6 +22,7 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import AddExperience from './pages/AddExperience';
 import Home from './pages/Home';
+import OrganizationsMap from './pages/OrganizationsMap';
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/internships" element={<InternshipList />} />
+        <Route path="/map" element={<OrganizationsMap />} />
         <Route path="/internships/:id" element={<InternshipDetail />} />
         <Route
           path="/internships/new"

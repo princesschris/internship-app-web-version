@@ -5,6 +5,7 @@ import {
   IoCloseOutline,
   IoHomeOutline,
   IoBriefcaseOutline,
+  IoMapOutline,
   IoAddCircleOutline,
   IoDocumentTextOutline,
   IoPersonCircleOutline,
@@ -44,6 +45,11 @@ export default function Navbar() {
           <Link to="/internships" onClick={() => setOpen(false)} className={styles.link}>
             <IoBriefcaseOutline size={18} />
             Browse
+          </Link>
+
+          <Link to="/map" onClick={() => setOpen(false)} className={styles.link}>
+            <IoMapOutline size={18} />
+            Map
           </Link>
 
           {user && isOrg && (
