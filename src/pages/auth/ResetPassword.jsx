@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import PasswordField from '../../components/PasswordField';
 import styles from './AuthForms.module.css';
 
 export default function ResetPassword() {
@@ -16,7 +17,7 @@ export default function ResetPassword() {
     setLoading(true);
     try {
       await updatePassword(password);
-      navigate('/internships');
+      navigate('/home');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -32,10 +33,15 @@ export default function ResetPassword() {
         <form className={`card ${styles.form}`} onSubmit={handleSubmit}>
           {error && <p className="error-text">{error}</p>}
 
-          <div className="field">
-            <label>New password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} minLength={6} required />
-          </div>
+          <PasswordField
+            label="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength={6}
+            required
+            showStrength
+            autoComplete="new-password"
+          />
 
           <button className={`btn btn-primary ${styles.submit}`} disabled={loading}>
             {loading ? 'Saving...' : 'Save password'}

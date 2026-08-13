@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import PasswordField from '../../components/PasswordField';
 import styles from './AuthForms.module.css';
 
 export default function StudentLogin() {
@@ -39,10 +40,13 @@ export default function StudentLogin() {
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
 
-          <div className="field">
-            <label>Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </div>
+          <PasswordField
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+          />
 
           <Link to="/forgot-password" className={styles.forgot}>Forgot password?</Link>
 

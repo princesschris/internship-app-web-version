@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import LocationSelect from '../../components/LocationSelect';
 import CheckEmailNotice from '../../components/CheckEmailNotice';
+import PasswordField from '../../components/PasswordField';
 import styles from './AuthForms.module.css';
 
 export default function OrganizationSignUp() {
@@ -70,10 +71,15 @@ export default function OrganizationSignUp() {
             <input type="email" value={form.email} onChange={update('email')} required />
           </div>
 
-          <div className="field">
-            <label>Password</label>
-            <input type="password" value={form.password} onChange={update('password')} minLength={6} required />
-          </div>
+          <PasswordField
+            label="Password"
+            value={form.password}
+            onChange={update('password')}
+            minLength={6}
+            required
+            showStrength
+            autoComplete="new-password"
+          />
 
           <div className={styles.row}>
             <div className="field">
