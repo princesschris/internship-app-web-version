@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-page: #faf8f3;
+  --color-card: #ffffff;
+  --color-ink: #111111;
+  --color-muted: #6b6b66;
+  --color-line: #e8e5dc;
+  --color-soft: #f1eee6;
+  --color-ok: #1f7a4d;
+  --font-display: "Newsreader", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+body { background: var(--color-page); color: var(--color-ink); font-family: var(--font-sans); }
