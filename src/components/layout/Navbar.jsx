@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
-import { Bell } from 'lucide-react'
-import { student } from '../../data/mock'
+import { useAuth } from '../../context/AuthContext'
+import UserMenu from './UserMenu'
 
 const links = [
   { to: '/student', label: 'Dashboard', end: true },
@@ -11,6 +11,7 @@ const links = [
 ]
 
 export default function Navbar() {
+  const { profile } = useAuth()
   return (
     <header className="sticky top-0 z-10 border-b border-line bg-page/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-8 px-6 py-4">
@@ -29,16 +30,7 @@ export default function Navbar() {
             </NavLink>
           ))}
         </nav>
-        <Bell size={18} className="text-muted" />
-        <div className="flex items-center gap-3">
-          <div className="hidden text-right text-xs sm:block">
-            <p className="font-medium">{student.fullName}</p>
-            <p className="text-muted">{student.institution}</p>
-          </div>
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-ink text-xs font-medium text-white">
-            {student.firstName[0]}
-          </div>
-        </div>
+        <UserMenu profilePath="/student/profile" subtitle={profile?.details?.university} />
       </div>
     </header>
   )

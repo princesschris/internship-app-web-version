@@ -1,12 +1,23 @@
+import { useEffect, useState } from 'react'
 import { Check } from 'lucide-react'
-import { student, placement, pipeline, attendance, meeting, advisor, milestones, internships } from '../../data/mock'
+import { student, placement, attendance, meeting, advisor, milestones } from '../../data/mock'
+import { listInternships, myApplicationCounts } from '../../lib/api'
 import PlacementCard from '../../components/student/PlacementCard'
+import { useAuth } from '../../context/AuthContext'
 
 const card = 'rounded-2xl border border-line bg-card p-6'
 const btnDark = 'rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white'
 const btnLight = 'rounded-full border border-line bg-card px-5 py-2.5 text-sm font-medium'
 
 export default function Dashboard() {
+  const { profile } = useAuth()
+  const firstName = profile?.full_name?.split(' ')[0] || student.firstName
+  const [recs, setRecs] = useState([])
+  const [pipe, setPipe] = useState({ active: 0, shortlisted: 0, offers: 0 })
+  useEffect(() => {
+    listInternships().then((j) => setRecs(j.slice(0, 2))).catch(() => {})
+    myApplicationCounts().then(setPipe).catch(() => {})
+  }, [])
   const pct = Math.round((placement.loggedHours / placement.targetHours) * 100)
 
   return (
@@ -14,7 +25,7 @@ export default function Dashboard() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs text-muted">{student.term} · Verified practicum student</p>
-          <h1 className="mt-2 font-display text-4xl">Good morning, <em>{student.firstName}.</em></h1>
+          <h1 className="mt-2 font-display text-4xl">Good morning, <em>{firstName}.</em></h1>
           <p className="mt-2 max-w-xl text-muted">
             Your placement is underway. Review your milestones, confirm today's hours, and prepare for your next supervisor meeting.
           </p>
@@ -71,7 +82,8 @@ export default function Dashboard() {
               <a href="/student/explore" className="text-sm font-medium hover:underline">View all</a>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              {internships.slice(0, 2).map((j) => <PlacementCard key={j.id} job={j} compact />)}
+              {recs.map((j) => <PlacementCard key={j.id} job={j} compact />)}
+              {recs.length === 0 && <p className="text-sm text-muted">No placements to show yet.</p>}
             </div>
           </section>
         </div>
@@ -80,7 +92,7 @@ export default function Dashboard() {
           <section className={card}>
             <h3 className="text-sm font-semibold">Applications</h3>
             <div className="mt-4 grid grid-cols-3 text-center">
-              {[['In review', pipeline.active], ['Shortlisted', pipeline.shortlisted], ['Offers', pipeline.offers]].map(([l, n]) => (
+              {[['In review', pipe.active], ['Shortlisted', pipe.shortlisted], ['Offers', pipe.offers]].map(([l, n]) => (
                 <div key={l}><p className="text-2xl font-semibold">{n}</p><p className="text-xs text-muted">{l}</p></div>
               ))}
             </div>

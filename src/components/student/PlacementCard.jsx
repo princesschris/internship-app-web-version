@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom'
 import { Bookmark } from 'lucide-react'
+import Picture from '../ui/Picture'
 import { naira, shortDate } from '../../lib/format'
 
 export default function PlacementCard({ job, compact = false }) {
@@ -6,10 +8,10 @@ export default function PlacementCard({ job, compact = false }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-line bg-card">
       {!compact && (
-        <div className="relative flex h-32 items-end justify-between bg-soft p-4">
+        <div className="relative">
+          <Picture src={job.image} alt={`${job.organisation} workplace`} label={initials} className="h-36 w-full font-display text-4xl" />
           <span className="absolute left-4 top-4 rounded-full bg-card px-2.5 py-1 text-xs font-medium">{job.match}% profile match</span>
-          <span className="font-display text-4xl text-muted/50">{initials}</span>
-          <span className="text-xs text-muted">{job.openings} openings</span>
+          <span className="absolute bottom-3 right-4 rounded-full bg-card px-2.5 py-1 text-xs">{job.openings} openings</span>
         </div>
       )}
       <div className="flex flex-1 flex-col gap-3 p-5">
@@ -32,7 +34,7 @@ export default function PlacementCard({ job, compact = false }) {
         </div>
         <div className="mt-auto flex items-center justify-between pt-3 text-xs">
           <span className="text-muted">Applications close {shortDate(job.deadline)}</span>
-          <button className="font-medium hover:underline">View placement</button>
+          <Link to={`/student/explore/${job.id}`} className="font-medium hover:underline">View placement</Link>
         </div>
       </div>
     </article>
